@@ -1,0 +1,9 @@
+Flask
+requests
+python-dotenv
+gunicorn
+pandas
+numpy
+scikit-learn
+firebase-admin
+xgboost

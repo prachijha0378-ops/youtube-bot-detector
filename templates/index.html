@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>YT BotScope — YouTube Bot Channel Detector</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-icon">🔍</div>
+    <h1>YouTube Channel <span>Bot Detector</span></h1>
+    <p>Isolation Forest ML model — channel URL paste karo, real data fetch hoga aur AI analyze karega.</p>
+    <div class="model-badge">⚡ Isolation Forest · 200 Trees · 9 Features · Unsupervised ML</div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-card">
+    <label>YouTube Channel URL / @username / Channel ID</label>
+    <div class="input-row">
+      <input id="channelUrl" type="text"
+        placeholder="https://youtube.com/@channel  ya  youtube.com/channel/UC..."/>
+      <button onclick="analyzeChannel()" id="analyzeBtn">
+        🔍 Analyze
+      </button>
+    </div>
+    <small>
+      Supported: youtube.com/@name &nbsp;·&nbsp; youtube.com/channel/UC... &nbsp;·&nbsp; @username &nbsp;·&nbsp; UC...
+    </small>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <p id="loadingTxt">YouTube se data fetch ho raha hai...</p>
+    <small>Isolation Forest model analyze kar raha hai</small>
+  </div>
+
+  <!-- ERROR -->
+  <div id="error" class="error"></div>
+
+  <!-- RESULT -->
+  <div id="result" class="result">
+
+    <!-- Channel Info -->
+    <div class="channel-card">
+      <img id="thumbnail" src="" alt="Channel avatar" onerror="this.style.display='none'"/>
+      <div class="ch-info">
+        <h2 id="channelName">—</h2>
+        <p id="channelHandle" class="ch-handle"></p>
+        <p id="channelId" class="ch-id"></p>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <span>👥 Subscribers</span>
+        <strong id="subscribers">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>👁️ Total Views</span>
+        <strong id="views">0</strong>
+      </div>
+      <div class="stat-card">
+        <span>🎬 Videos</span>
+        <strong id="videos">0</strong>
+      </div>
+    </div>
+
+    <!-- Verdict -->
+    <div id="verdictBox" class="verdict-card">
+      <div class="score-wrap">
+        <div class="score-circle" id="scoreCircle">
+          <span id="score">0</span>
+          <small>/100</small>
+        </div>
+        <div class="score-label">Anomaly Risk Score</div>
+      </div>
+      <div class="verdict-info">
+        <p class="verdict-sub">ML Verdict</p>
+        <h2 id="verdict">—</h2>
+        <div class="risk-bar-wrap">
+          <div class="risk-bar-track">
+            <div class="risk-bar-fill" id="riskBarFill" style="width:0%"></div>
+          </div>
+          <div class="risk-bar-labels">
+            <span>Safe</span><span>Suspicious</span><span>Bot</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Feature Breakdown -->
+    <div class="features-card">
+      <h3>📊 Feature Analysis — Z-Score from Population Mean</h3>
+
+      <!-- Z-Score Guide Table -->
+      <div class="zscore-guide">
+        <table class="guide-table">
+          <thead>
+            <tr><th>Metric</th><th>Normal Range</th><th>Anomaly Range</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Z-Score</td><td class="ok-cell">-1.5 to +1.5</td><td class="bad-cell">Below -2 or Above +2</td></tr>
+            <tr><td>Views / Subscriber</td><td class="ok-cell">5x – 80x</td><td class="bad-cell">Above 200x</td></tr>
+            <tr><td>Videos / Day</td><td class="ok-cell">0.01 – 2</td><td class="bad-cell">Above 5</td></tr>
+            <tr><td>Bot Prediction</td><td class="ok-cell">Score 0–35 → Normal ✅</td><td class="bad-cell">Score 65+ → Bot 🚨</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="feat-table" id="featTable"></div>
+    </div>
+
+    <!-- Signals -->
+    <div class="signals-card">
+      <h3>🔍 Detection Signals</h3>
+      <div id="signals"></div>
+    </div>
+
+    <!-- ML Info -->
+    <div class="ml-info-card">
+      <h3>🤖 ML Model Details</h3>
+      <div class="ml-grid" id="mlGrid"></div>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice">
+      ⚠️ <b>Important:</b> Yeh ek automated anomaly assessment hai publicly available data ke basis par.
+      Iska matlab yeh nahi ki channel confirmed bot hai — yeh ek statistical analysis hai.
+      Final decision human review ke baad lena chahiye.
+    </div>
+
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
